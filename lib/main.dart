@@ -26,11 +26,11 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _counter = 0;
   void _incrementCounter() {
     setState(() {
-      print("call setState");
+      // print("call setState");
       _counter++;
     });
     nextpage();
@@ -44,19 +44,20 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    print("call initState");
+    // print("call initState");
     super.initState();
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void didChangeDependencies() {
-    print("call didChangeDependencies");
+    // print("call didChangeDependencies");
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("call build");
+    // print("call build");
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -85,19 +86,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void didUpdateWidget(oldWidget) {
-    print("call didUpdateWidget");
+    // print("call didUpdateWidget");
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   void deactivate() {
-    print("call deactivate");
+    // print("call deactivate");
     super.deactivate();
   }
 
   @override
   void dispose() {
-    print("call dispose");
+    // print("call dispose");
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("stete = $state");
+    switch (state) {
+      case AppLifecycleState.inactive:
+        print('非アクティブになったときの処理');
+        break;
+      case AppLifecycleState.paused:
+        print('停止されたときの処理');
+        break;
+      case AppLifecycleState.resumed:
+        print('再開されたときの処理');
+        break;
+      case AppLifecycleState.detached:
+        print('破棄されたときの処理');
+        break;
+    }
   }
 }
